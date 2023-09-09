@@ -6,21 +6,24 @@ public class PlayerController : MonoBehaviour
 {
     public Rigidbody rb;
     public float speed = 5f;
-    // Start is called before the first frame update
-    void Start()
+
+    void Update() 
     {
+        if (Input.GetMouseButton(0) || Input.touchCount > 0)
+        {
+            Vector3 cursorPos = Input.mousePosition;
+            if (Input.touchCount > 0)
+                cursorPos = Input.GetTouch(0).position;
 
-    }
+            Vector3 worldCursorPos = Camera.main.ScreenToWorldPoint(new Vector3(cursorPos.x, cursorPos.y, transform.position.z - Camera.main.transform.position.z));
 
-    // Update is called once per frame
-    void Update()
-    {
-        int dir = (Input.GetKey(KeyCode.RightArrow) ? 1:0) - (Input.GetKey(KeyCode.LeftArrow) ? 1:0);
-        rb.velocity = new Vector3(dir, 0, 0) * speed;
-    }
+            float diff = worldCursorPos.x - transform.position.x;
 
-    void FixedUpdate() 
-    {
-
+            rb.velocity = new Vector3(diff, 0, 1) * speed;
+        }
+        else
+        {
+            rb.velocity = new Vector3(0, 0, 1);
+        }
     }
 }
